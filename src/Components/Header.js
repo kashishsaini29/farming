@@ -9,7 +9,7 @@ const Header = () => {
       <img src={BG} className="h-96 w-screen" alt="" srcset="" />
       <div className="flex space-x-20">
         <div className="left flex">
-          <img src={FarmAi} className="w-96 h-96 m-12 ml-24 rounded-lg" />
+          <img src={FarmAi} className="w-96 h-96 m-12 ml-24 rounded-lg"  alt=""/>
           <img
             src={FarmAi2}
             className="w-64 h-52 mt-72 ml-80 absolute rounded-lg"
