@@ -5,6 +5,7 @@ import FormBg from "../img/farm-bg2.jpg";
 import axios from "axios";
 
 const Form = () => {
+  const[laoding,setLoading] = useState(true);
   const [data, setData] = useState({
     nitrogen: "",
     potassium: "",
@@ -12,6 +13,8 @@ const Form = () => {
     pH: "",
     rainfall: "",
   });
+
+  const [response,setResponse]=useState();
   const handleChange = (e, state) => {
     setData({
       ...data,
@@ -31,31 +34,55 @@ const Form = () => {
     data.rainfall +
     " mm";
 
-  const handleSubmit = () => {
-    axios({
-      method: "post",
-      url: "http://localhost:5000/chat",
-      data: { result },
-      headers: {
-        // 'Authorization': `bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    })
-      .then((data) => console.log(data))
-      .catch((error) => console.log(error));
-    // axios
-    //   .post("http://localhost:5000/chat",result)
-    //   .then((data) => console.log(data))
-    //   .catch((error) => console.log(error));
+  const handleSubmit = async() => {
+
+    axios.post("http://localhost:5000/chat",{result})
+    .then((res)=>{setResponse(res.data.split('\n'));setLoading(false);})
+
   };
 
   return (
     <div className="absolute w-full">
+
+
+
+{/* model */}
+<div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div className="modal-dialog">
+    <div className="modal-content">
+      <div className="modal-header">
+        <h1 className="modal-title fs-5" id="exampleModalLabel">Response</h1>
+        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div className="modal-body">
+       { laoding
+       ?
+       <div class="d-flex justify-content-center">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+       :
+          response.map((e,key)=>{
+            return <p>{e}</p>
+            })
+       }
+      </div>
+      <div className="modal-footer">
+        <button type="button" className="btn btn-outline-primary" data-bs-dismiss="modal" onClick={()=>{setLoading(false)}}>Close</button>
+        {/* <button type="button" class="btn btn-outlinxe-primary">Save changes</button> */}
+      </div>
+    </div>
+  </div>
+</div>
+
+{/* end */}
+
       <img
         src={FormBg}
         className="w-screen h-screen opacity-40"
         alt=""
-        srcset=""
+        srcSet=""
       />
       <div className="border-2  text-center -mt-105 ml-105 w-fit relative">
         <div className="mb-3">
@@ -134,6 +161,7 @@ const Form = () => {
       <button
         className="border-black p-2 ml-105 border-solid text-2xl bg-green-600 text-white font-bold cursor-pointer relative"
         onClick={handleSubmit}
+        data-bs-toggle="modal" data-bs-target="#exampleModal"
       >
         Submit
       </button>
